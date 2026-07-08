@@ -1,0 +1,40 @@
+{
+  "model_type": "transformer_full_finetuning",
+  "model_name": "distilbert-base-uncased",
+  "label2id": {
+    "Low": 0,
+    "Medium": 1,
+    "High": 2
+  },
+  "id2label": {
+    "0": "Low",
+    "1": "Medium",
+    "2": "High"
+  },
+  "text_col": "Text",
+  "label_col": "Risk_Level",
+  "max_length": 128,
+  "random_state": 42,
+  "split": {
+    "train": 0.7,
+    "valid": 0.1,
+    "test": 0.2
+  },
+  "class_weights_low_medium_high": [
+    1.8975694444444444,
+    1.3216444981862152,
+    0.5826226012793176
+  ],
+  "valid_result": {
+    "eval_loss": 0.5368171334266663,
+    "eval_accuracy": 0.8550106609808102,
+    "eval_macro_f1": 0.8391521121592551,
+    "eval_weighted_f1": 0.8552487619290181
+  },
+  "test_result": {
+    "eval_loss": 0.5081387758255005,
+    "eval_accuracy": 0.8431163287086446,
+    "eval_macro_f1": 0.8256895748209002,
+    "eval_weighted_f1": 0.8420650573756533
+  }
+}
