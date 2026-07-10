@@ -48,6 +48,9 @@ M1 tokenizer: vinai/bertweet-covid19-base-cased
 M1 model weights: models/m1_final_verified
 ```
 
+단순 감정 표현이나 불만 등을 걸러내고, 실제 보건 상황과 관련된 정보성 글만 M2(위험도 분류)로 전달하기 위한 필터 역할을 합니다. 기반 모델로 사용한 vinai/bertweet-covid19-base-cased는 일반 BERT와 달리 트윗과 COVID-19 문맥에 맞춰 사전학습되어, 짧고 비정형적인 SNS 문장 처리에 더 적합합니다.
+또한, 학습 시 사전학습된 Encoder 가중치를 고정(Frozen)하고 마지막 Classification head만 학습시켜, 제한된 데이터 환경에서의 과적합 위험을 낮추고 학습시간을 감소하습니다.
+
 ### M2: 위험도 분류 모델
 
 M2는 M1에서 `INFORMATIVE`로 판단된 게시글에 대해서만 실행됩니다.
@@ -293,6 +296,8 @@ M1 confusion matrix는 다음과 같다.
 | UNINFORMATIVE | 5 | 15 |
 
 이를 통해 M1은 실제 `INFORMATIVE` 30개 중 27개를 올바르게 통과시켰고, 실제 `UNINFORMATIVE` 20개 중 15개를 올바르게 필터링하였다. 반면 실제 `INFORMATIVE` 3개는 `UNINFORMATIVE`로 잘못 필터링되었고, 실제 `UNINFORMATIVE` 5개는 `INFORMATIVE`로 잘못 통과되었다.
+
+M1이 정보성 트윗을 UNINFORMATIVE로 잘못 분류하면 해당 트윗은 M2로 넘어가지 못하므로, 전체 파이프라인에서 M1의 Informative Recall(0.9000) 성능은 매우 중요하다. 여러 하이퍼파라미터 실험을 진행한 결과, Validation 기준 가장 안정적인 성능(Validation Macro F1 0.829)을 보인 모델 설정을 최종 채택하였다.
 
 ### 4. M2 성능 평가
 
